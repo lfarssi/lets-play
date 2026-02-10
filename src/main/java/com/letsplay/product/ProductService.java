@@ -1,6 +1,7 @@
 package com.letsplay.product;
 
-import com.letsplay.common.exception.*;
+import com.letsplay.exception.*;
+import com.letsplay.exception.NotFoundException;
 import com.letsplay.product.dto.*;
 import com.letsplay.security.UserPrincipal;
 import org.springframework.stereotype.Service;

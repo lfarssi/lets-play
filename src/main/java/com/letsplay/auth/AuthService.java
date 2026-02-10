@@ -1,7 +1,7 @@
 package com.letsplay.auth;
 
 import com.letsplay.auth.dto.*;
-import com.letsplay.common.exception.ConflictException;
+import com.letsplay.exception.ConflictException;
 import com.letsplay.security.JwtService;
 import com.letsplay.user.User;
 import com.letsplay.user.UserRepository;

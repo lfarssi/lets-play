@@ -1,6 +1,6 @@
 package com.letsplay.user;
 
-import com.letsplay.common.exception.NotFoundException;
+import com.letsplay.exception.NotFoundException;
 import com.letsplay.user.dto.UserResponse;
 import org.springframework.stereotype.Service;
 

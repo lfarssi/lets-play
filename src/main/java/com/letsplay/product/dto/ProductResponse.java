@@ -1,5 +1,3 @@
 package com.letsplay.product.dto;
 
-public class ProductResponse {
-    
-}
+public record ProductResponse(String id, String name, String description, Double price, String userId) {}

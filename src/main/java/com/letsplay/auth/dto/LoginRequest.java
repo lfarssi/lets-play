@@ -1,5 +1,8 @@
 package com.letsplay.auth.dto;
 
-public class LoginRequest {
-    
-}
+import jakarta.validation.constraints.*;
+
+public record LoginRequest(
+        @Email @NotBlank String email,
+        @NotBlank String password
+) {}

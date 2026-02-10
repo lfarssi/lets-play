@@ -1,5 +1,3 @@
 package com.letsplay.user.dto;
 
-public class UserResponse {
-    
-}
+public record UserResponse(String id, String name, String email, String role) {}

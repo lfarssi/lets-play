@@ -43,6 +43,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiError> fallback(Exception ex, HttpServletRequest req) {
         // log ex in real app
+        System.out.println("hnaaa =>"+ex);
         return build(HttpStatus.INTERNAL_SERVER_ERROR, "Unexpected error", req);
     }
 

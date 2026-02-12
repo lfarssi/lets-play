@@ -1,9 +1,0 @@
-server:
-  port: 8080
-
-spring:
-  mongodb:
-    uri: mongodb://localhost:27017/lets_play
-jwt:
-  secret: "CHANGE_THIS_TO_A_LONG_RANDOM_SECRET_64+_CHARS"
-  expirationMinutes: 60

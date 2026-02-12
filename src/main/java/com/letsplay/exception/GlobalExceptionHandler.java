@@ -3,6 +3,7 @@ package com.letsplay.exception;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.*;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,6 +30,11 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<ApiError> badCreds(BadCredentialsException ex, HttpServletRequest req) {
         return build(HttpStatus.UNAUTHORIZED, "Invalid credentials", req);
+    }
+
+    @ExceptionHandler(AuthorizationDeniedException.class)
+    public ResponseEntity<ApiError> accessDenied(AuthorizationDeniedException ex, HttpServletRequest req) {
+        return build(HttpStatus.FORBIDDEN, "Access Denied", req);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

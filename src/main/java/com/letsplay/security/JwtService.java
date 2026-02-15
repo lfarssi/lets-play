@@ -40,6 +40,7 @@ public class JwtService {
     }
 
     public Jws<Claims> parse(String token) {
+        
         return Jwts.parser()
                 .verifyWith((javax.crypto.SecretKey) key)
                 .build()

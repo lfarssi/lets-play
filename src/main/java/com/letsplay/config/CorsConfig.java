@@ -2,7 +2,6 @@ package com.letsplay.config;
 
 import org.springframework.context.annotation.*;
 import org.springframework.web.cors.*;
-import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
 
 import java.util.List;
 

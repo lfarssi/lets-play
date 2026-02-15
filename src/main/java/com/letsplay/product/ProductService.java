@@ -1,9 +1,9 @@
 package com.letsplay.product;
 
 import com.letsplay.exception.*;
-import com.letsplay.exception.NotFoundException;
 import com.letsplay.product.dto.*;
-import com.letsplay.security.UserPrincipal;
+import com.letsplay.user.User;
+
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,21 +19,22 @@ public class ProductService {
         return repo.findAll().stream().map(this::toResponse).toList();
     }
 
-    public ProductResponse create(ProductRequest req, UserPrincipal principal) {
+    public ProductResponse create(ProductRequest req, User user) {
         Product p = Product.builder()
                 .name(req.name())
                 .description(req.description())
                 .price(req.price())
-                .userId(principal.getId())
+                .userId(user.getId())
                 .build();
         return toResponse(repo.save(p));
     }
 
-    public ProductResponse update(String id, ProductRequest req, UserPrincipal principal) {
+    public ProductResponse update(String id, ProductRequest req, User user) {
         Product p = repo.findById(id).orElseThrow(() -> new NotFoundException("Product not found"));
 
-        boolean isAdmin = "ROLE_ADMIN".equals(principal.getRole());
-        boolean isOwner = p.getUserId().equals(principal.getId());
+        boolean isAdmin = "ROLE_ADMIN".equals(user.getRole().toString());
+
+        boolean isOwner = p.getUserId().equals(user.getId());
         if (!isAdmin && !isOwner) throw new ForbiddenException("Not allowed to modify this product");
 
         p.setName(req.name());
@@ -43,11 +44,11 @@ public class ProductService {
         return toResponse(repo.save(p));
     }
 
-    public void delete(String id, UserPrincipal principal) {
+    public void delete(String id, User user) {
         Product p = repo.findById(id).orElseThrow(() -> new NotFoundException("Product not found"));
 
-        boolean isAdmin = "ROLE_ADMIN".equals(principal.getRole());
-        boolean isOwner = p.getUserId().equals(principal.getId());
+        boolean isAdmin = "ROLE_ADMIN".equals(user.getRole().toString());
+        boolean isOwner = p.getUserId().equals(user.getId());
         if (!isAdmin && !isOwner) throw new ForbiddenException("Not allowed to delete this product");
 
         repo.delete(p);

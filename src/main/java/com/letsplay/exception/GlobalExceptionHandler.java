@@ -1,11 +1,15 @@
 package com.letsplay.exception;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.UnexpectedTypeException;
+
 import org.springframework.http.*;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.time.Instant;
 
@@ -32,6 +36,22 @@ public class GlobalExceptionHandler {
         return build(HttpStatus.UNAUTHORIZED, "Invalid credentials", req);
     }
 
+    @ExceptionHandler(UnexpectedTypeException.class)
+    public ResponseEntity<ApiError> unexpectedValidation(
+            UnexpectedTypeException ex,
+            HttpServletRequest req) {
+                System.out.println(ex);
+        return build(
+                HttpStatus.BAD_REQUEST,
+                "Invalid validation configuration",
+                req);
+    }
+
+    @ExceptionHandler(NullPointerException.class)
+    public ResponseEntity<ApiError> nullPointer(NullPointerException ex, HttpServletRequest req) {
+        return build(HttpStatus.INTERNAL_SERVER_ERROR, "internal server error", req);
+    }
+
     @ExceptionHandler(AuthorizationDeniedException.class)
     public ResponseEntity<ApiError> accessDenied(AuthorizationDeniedException ex, HttpServletRequest req) {
         return build(HttpStatus.FORBIDDEN, "Access Denied", req);
@@ -46,10 +66,22 @@ public class GlobalExceptionHandler {
         return build(HttpStatus.BAD_REQUEST, msg, req);
     }
 
+    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+    public ResponseEntity<ApiError> methodNotAllowed(HttpRequestMethodNotSupportedException ex,
+            HttpServletRequest req) {
+        String msg = "Method " + ex.getMethod() + " not allowed";
+        return build(HttpStatus.METHOD_NOT_ALLOWED, msg, req);
+    }
+
+    @ExceptionHandler(NoResourceFoundException.class)
+    public ResponseEntity<ApiError> noResourceFound(NoResourceFoundException ex, HttpServletRequest req) {
+        return build(HttpStatus.NOT_FOUND, "Resource not found", req);
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiError> fallback(Exception ex, HttpServletRequest req) {
         // log ex in real app
-        System.out.println("hnaaa =>"+ex);
+        System.out.println("hnaaa =>" + ex);
         return build(HttpStatus.INTERNAL_SERVER_ERROR, "Unexpected error", req);
     }
 
@@ -59,8 +91,7 @@ public class GlobalExceptionHandler {
                 status.value(),
                 status.getReasonPhrase(),
                 message,
-                req.getRequestURI()
-        );
+                req.getRequestURI());
         return ResponseEntity.status(status).body(body);
     }
 }
